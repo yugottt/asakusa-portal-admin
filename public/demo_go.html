@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人力車配車中 - PULSE ASAKUSA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF4B2B;
+            --secondary-color: #FF416C;
+            --text-color: #333;
+            --bg-color: #FFFFFF;
+            --card-bg-color: #f9f9f9;
+        }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            position: relative;
+        }
+        .map-container {
+            width: 100%;
+            height: 60vh;
+            position: relative;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        .info-card {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-color);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .eta {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .expand-btn {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .rickshaw-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .rickshaw-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        .rickshaw-details {
+            flex-grow: 1;
+        }
+        .rickshaw-name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .vehicle-info, .driver-languages {
+            font-size: 14px;
+            color: #666;
+        }
+        .driver-rating {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .driver-rating .stars {
+            color: #FFD700;
+            margin-right: 5px;
+        }
+        .trip-info {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .trip-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .cancel-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .cancel-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal-btn.confirm {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .modal-btn.cancel {
+            background-color: #EEEEEE;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+        <div class="info-card">
+                <div class="card-header">
+            <div class="eta">到着まで約5分</div>
+            <div class="expand-btn">≡</div>
+        </div>
+        <div class="rickshaw-info">
+            <img src="https://www.tri-stage.jp/files/bgeditor/img/157__MjAyMjA5MDJfMDAx.jpg" alt="田中 太郎" class="rickshaw-avatar">
+            <div class="rickshaw-details">
+                <div class="rickshaw-name">田中 太郎</div>
+                <div class="vehicle-info">車両番号: AS-1234</div>
+                <div class="driver-rating">
+                    <span class="stars">★★★★☆</span>
+                    <span>4.8</span>
+                </div>
+                <div class="driver-languages">日本語, English, 中文</div>
+            </div>
+        </div>
+            <div class="trip-info">
+                <div class="trip-details">
+                    <span>出発地</span>
+                    <span>浅草寺雷門前</span>
+                </div>
+                <div class="trip-details">
+                    <span>目的地</span>
+                    <span>米久本店</span>
+                </div>
+                <div class="trip-details">
+                    <span>予想所要時間</span>
+                    <span>約10分</span>
+                </div>
+                <div class="trip-details">
+                    <span>概算料金</span>
+                    <span>2,000円</span>
+                </div>
+            </div>
+            <button class="cancel-btn">配車をキャンセル</button>
+        </div>
+    </div>
+
+    <div id="cancelModal" class="modal">
+        <div class="modal-content">
+            <h2>キャンセル確認</h2>
+            <p>キャンセルすると500円のキャンセル料が発生します。キャンセルしますか？</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel">戻る</button>
+                <button class="modal-btn confirm">キャンセルする</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHt4hYhoWUvZ9Ok4zLhyiWaQfQFmRg4R0&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 35.7147, lng: 139.7967 },
+                zoom: 15,
+                styles: [
+                    { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
+                    { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+                    { elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
+                    { elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f5" }] },
+                    { featureType: "administrative.land_parcel", elementType: "labels.text.fill", stylers: [{ color: "#bdbdbd" }] },
+                    { featureType: "poi", elementType: "geometry", stylers: [{ color: "#eeeeee" }] },
+                    { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+                    { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#e5e5e5" }] },
+                    { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
+                    { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+                    { featureType: "road.arterial", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+                    { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#dadada" }] },
+                    { featureType: "road.highway", elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
+                    { featureType: "road.local", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
+                    { featureType: "transit.line", elementType: "geometry", stylers: [{ color: "#e5e5e5" }] },
+                    { featureType: "transit.station", elementType: "geometry", stylers: [{ color: "#eeeeee" }] },
+                    { featureType: "water", elementType: "geometry", stylers: [{ color: "#c9c9c9" }] },
+                    { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] }
+                ]
+            });
+
+            const rickshawPosition = { lat: 35.7145, lng: 139.7960 };
+            const userPosition = { lat: 35.7150, lng: 139.7967 };
+
+            new google.maps.Marker({
+                position: rickshawPosition,
+                map: map,
+                icon: {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: 5,
+                    fillColor: "#FF4B2B",
+                    fillOpacity: 1,
+                    strokeWeight: 2,
+                    rotation: 45
+                }
+            });
+
+            new google.maps.Marker({
+                position: userPosition,
+                map: map,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 7,
+                    fillColor: "#4285F4",
+                    fillOpacity: 1,
+                    strokeColor: "#ffffff",
+                    strokeWeight: 2
+                }
+            });
+        }
+
+        document.querySelector('.cancel-btn').addEventListener('click', function() {
+            document.getElementById('cancelModal').style.display = 'block';
+        });
+
+        document.querySelector('.modal-btn.cancel').addEventListener('click', function() {
+            document.getElementById('cancelModal').style.display = 'none';
+        });
+
+        document.querySelector('.modal-btn.confirm').addEventListener('click', function() {
+            alert('配車をキャンセルしました。');
+            document.getElementById('cancelModal').style.display = 'none';
+        });
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('cancelModal')) {
+                document.getElementById('cancelModal').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

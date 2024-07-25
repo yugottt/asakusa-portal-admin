@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浅草観光詳細データダッシュボード</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        #map {
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>浅草観光詳細データダッシュボード</h1>
+    <div class="dashboard">
+        <div class="card">
+            <h2>時間帯別人気カテゴリ</h2>
+            <canvas id="timeBasedPopularityChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>カテゴリ別需要と供給のギャップ</h2>
+            <canvas id="demandSupplyGapChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>エリア別人気スポット</h2>
+            <div id="map"></div>
+        </div>
+        <div class="card">
+            <h2>国籍別興味カテゴリ</h2>
+            <canvas id="nationalityInterestChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>価格帯別需要分析</h2>
+            <canvas id="priceDemandChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>アクティビティ別満足度</h2>
+            <canvas id="activitySatisfactionChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>時間帯別混雑度と営業状況</h2>
+            <canvas id="crowdingOperationChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>混雑度と需要のギャップ</h2>
+            <canvas id="crowdingDemandGapChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>急上昇中のキーワード</h2>
+            <ul id="trendingKeywordsList"></ul>
+        </div>
+        <div class="card">
+            <h2>季節別人気アクティビティ</h2>
+            <canvas id="seasonalActivityChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // 時間帯別人気カテゴリ
+        new Chart(document.getElementById('timeBasedPopularityChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['6時', '9時', '12時', '15時', '18時', '21時'],
+                datasets: [
+                    {label: '寿司', data: [5, 20, 80, 60, 100, 70], borderColor: 'rgb(255, 99, 132)'},
+                    {label: 'カフェ', data: [30, 90, 50, 70, 40, 20], borderColor: 'rgb(54, 162, 235)'},
+                    {label: '着物レンタル', data: [10, 70, 90, 100, 60, 30], borderColor: 'rgb(75, 192, 192)'},
+                    {label: '寺社仏閣', data: [20, 60, 100, 90, 70, 40], borderColor: 'rgb(255, 159, 64)'}
+                ]
+            }
+        });
+
+        // カテゴリ別需要と供給のギャップ
+        new Chart(document.getElementById('demandSupplyGapChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['和食', '寿司', 'ラーメン', 'カフェ', '居酒屋', '茶道体験', '着物レンタル', 'ガイドツアー'],
+                datasets: [{
+                    label: '需要',
+                    data: [100, 90, 70, 80, 60, 50, 85, 40],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                }, {
+                    label: '供給',
+                    data: [80, 70, 90, 60, 50, 30, 60, 20],
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                }]
+            }
+        });
+
+        // エリア別人気スポット
+        var map = L.map('map').setView([35.7148, 139.7967], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.marker([35.7148, 139.7967]).addTo(map).bindPopup('浅草寺: 人気度90%');
+        L.marker([35.7123, 139.7977]).addTo(map).bindPopup('スカイツリー: 人気度85%');
+        L.marker([35.7138, 139.7955]).addTo(map).bindPopup('仲見世通り: 人気度80%');
+
+        // 国籍別興味カテゴリ
+        new Chart(document.getElementById('nationalityInterestChart').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: ['寿司', '着物体験', '寺社仏閣', 'アニメ関連', '伝統工芸', '温泉'],
+                datasets: [
+                    {label: '欧米', data: [90, 85, 80, 60, 70, 75], backgroundColor: 'rgba(255, 99, 132, 0.2)'},
+                    {label: 'アジア', data: [80, 90, 70, 85, 60, 65], backgroundColor: 'rgba(54, 162, 235, 0.2)'},
+                    {label: '国内', data: [70, 50, 60, 40, 80, 85], backgroundColor: 'rgba(75, 192, 192, 0.2)'}
+                ]
+            }
+        });
+
+        // 価格帯別需要分析
+        new Chart(document.getElementById('priceDemandChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['~1000円', '1000-3000円', '3000-5000円', '5000-10000円', '10000円~'],
+                datasets: [{
+                    label: '需要度',
+                    data: [80, 100, 60, 40, 20],
+                    backgroundColor: 'rgba(153, 102, 255, 0.5)'
+                }]
+            }
+        });
+
+        // アクティビティ別満足度
+        new Chart(document.getElementById('activitySatisfactionChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['茶道体験', '着物レンタル', 'ガイドツアー', '料理教室', '伝統工芸体験'],
+                datasets: [{
+                    label: '満足度',
+                    data: [4.5, 4.7, 4.2, 4.6, 4.4],
+                    backgroundColor: 'rgba(255, 159, 64, 0.5)'
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5
+                    }
+                }
+            }
+        });
+
+        // 時間帯別混雑度と営業状況
+        new Chart(document.getElementById('crowdingOperationChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['6時', '9時', '12時', '15時', '18時', '21時'],
+                datasets: [
+                    {
+                        label: '混雑度',
+                        data: [10, 50, 80, 70, 90, 60],
+                        borderColor: 'rgb(255, 99, 132)',
+                        yAxisID: 'y-axis-1'
+                    },
+                    {
+                        label: '営業中の店舗割合',
+                        data: [20, 80, 100, 100, 90, 70],
+                        borderColor: 'rgb(54, 162, 235)',
+                        yAxisID: 'y-axis-2'
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            id: 'y-axis-1',
+                            type: 'linear',
+                            position: 'left',
+                        },
+                        {
+                            id: 'y-axis-2',
+                            type: 'linear',
+                            position: 'right',
+                        }
+                    ]
+                }
+            }
+        });
+
+        // 混雑度と需要のギャップ
+        new Chart(document.getElementById('crowdingDemandGapChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['寿司', 'カフェ', '着物レンタル', 'ガイドツアー', '伝統工芸体験'],
+                datasets: [
+                    {
+                        label: '平均混雑度',
+                        data: [80, 60, 70, 50, 40],
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                    },
+                    {
+                        label: '需要レベル',
+                        data: [90, 70, 85, 60, 55],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // 急上昇中のキーワード
+        var trendingKeywordsList = document.getElementById('trendingKeywordsList');
+        ['デジタル茶道体験', 'ベジタリアン寿司', '夜景ガイドツアー', 'アニメ聖地巡礼', '浴衣de街歩き'].forEach(item => {
+            var li = document.createElement('li');
+            li.textContent = item;
+            trendingKeywordsList.appendChild(li);
+        });
+
+        // 季節別人気アクティビティ
+        new Chart(document.getElementById('seasonalActivityChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['春', '夏', '秋', '冬'],
+                datasets: [
+                    {label: '花見（隅田公園）', data: [100, 20, 40, 10], borderColor: 'rgb(255, 99, 132)'},
+                    {label: '浴衣体験', data: [30, 100, 50, 20], borderColor: 'rgb(54, 162, 235)'},
+                    {label: '酉の市', data: [10, 20, 100, 30], borderColor: 'rgb(75, 192, 192)'},
+                    {label: 'イルミネーション', data: [10, 20, 60, 100], borderColor: 'rgb(255, 159, 64)'}
+                ]
+            }
+        });
+    </script>
+</body>
+</html>

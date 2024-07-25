@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PULSE ASAKUSA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF4B2B;
+            --secondary-color: #FF416C;
+            --text-color: #333;
+            --bg-color: #FFFFFF;
+            --card-bg-color: #f9f9f9;
+        }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 0;
+            padding: 0 0 60px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 40px 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background-color: var(--card-bg-color);
+            font-size: 16px;
+            color: var(--text-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 4px 10px rgba(255, 75, 43, 0.2);
+        }
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            fill: var(--primary-color);
+        }
+        .language-selector {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .categories, .sort-options {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .category-btn, .sort-btn {
+            background-color: var(--card-bg-color);
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .category-btn:hover, .sort-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .section-title {
+            color: var(--primary-color);
+            margin-top: 30px;
+        }
+        .spot-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .spot-card {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .spot-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .spot-content {
+            padding: 15px;
+        }
+        .spot-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        .spot-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .map-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .nav-btn {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .nav-btn.active {
+            color: var(--primary-color);
+        }
+        .nav-btn svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        .nav-btn.active svg {
+            fill: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+           <svg width="300" height="150" xmlns="http://www.w3.org/2000/svg">
+              <!-- ASAKUSA -->
+              <text x="150" y="128" font-family="Gill Sans, sans-serif" font-size="56" font-weight="bold" fill="#FF4500" text-anchor="middle">ASAKUSA</text>
+              <!-- PULSE -->
+              <text x="150" y="80" font-family="Gill Sans, sans-serif" font-size="86" font-weight="bold" fill="#000000" text-anchor="middle">PULSE</text>
+            </svg>
+        </h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="観光スポットを検索...">
+            <svg class="search-icon" viewBox="0 0 24 24">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+        </div>
+
+        <div class="language-selector">
+            <span>日本語</span>
+            <span>English</span>
+            <span>中文</span>
+            <span>한국어</span>
+            <span>ไทย</span>
+        </div>
+
+        <div class="categories">
+            <button class="category-btn">食事</button>
+            <button class="category-btn">買い物</button>
+            <button class="category-btn">体験</button>
+            <button class="category-btn">宿泊</button>
+        </div>
+
+        <div class="sort-options">
+            <button class="sort-btn">人気順</button>
+            <button class="sort-btn">混雑度順</button>
+            <button class="sort-btn">待ち時間順</button>
+            <button class="sort-btn">距離順</button>
+        </div>
+
+        <h2 class="section-title">おすすめスポット</h2>
+
+        <div class="spot-list">
+            <div class="spot-card" id="store-1">
+                <img src="https://lh5.googleusercontent.com/proxy/vlYZeFtjWrAJAk2GLmZG6YTHI-bjKpUt8lyTNR7PRH4ZhZm3MrBuL-i0tpa2-hhsrv0rh_xxHCwsnvdmdBbeC3-oKBDDpdJ9bLb9rg" alt="米久本店" class="spot-image" id="store-image-1">
+                <div class="spot-content">
+                    <h3 id="store-name-1">米久本店</h3>
+                    <p id="store-description-1">創業1872年の老舗すき焼き店。伝統的な味わいと雰囲気が人気。</p>
+                    <div class="spot-info">
+                        <span id="store-crowdedness-1">混雑度: 中</span> |
+                        <span id="store-wait-time-1">待ち時間: 30分</span> |
+                        <span id="store-distance-1">0.5km</span>
+                    </div>
+                    <div id="store-metatags-1"></div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=米久本店+浅草" class="map-button" target="_blank">ルート表示</a>
+                </div>
+            </div>
+
+            <div class="spot-card" id="store-2">
+                <img src="https://imahan-honten.co.jp/img/access/imahangaikan1.jpg" alt="浅草今半 国際通り本店" class="spot-image" id="store-image-2">
+                <div class="spot-content">
+                    <h3 id="store-name-2">浅草今半 国際通り本店</h3>
+                    <p id="store-description-2">明治28年創業の老舗すき焼き店。とろけるような霜降り肉が絶品。</p>
+                    <div class="spot-info">
+                        <span id="store-crowdedness-2">混雑度: 高</span> |
+                        <span id="store-wait-time-2">待ち時間: 45分</span> |
+                        <span id="store-distance-2">0.7km</span>
+                    </div>
+                    <div id="store-metatags-2"></div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=浅草今半+国際通り本店" class="map-button" target="_blank">ルート表示</a>
+                </div>
+            </div>
+
+            <div class="spot-card" id="store-3">
+                <img src="https://sinozakiserori.com/wp-content/uploads/2018/11/img_6842.jpg" alt="神谷バー" class="spot-image" id="store-image-3">
+                <div class="spot-content">
+                    <h3 id="store-name-3">神谷バー</h3>
+                    <p id="store-description-3">1880年創業の老舗バー。名物「電気ブラン」は必飲の一杯。</p>
+                    <div class="spot-info">
+                        <span id="store-crowdedness-3">混雑度: 低</span> |
+                        <span id="store-wait-time-3">待ち時間: なし</span> |
+                        <span id="store-distance-3">0.3km</span>
+                    </div>
+                    <div id="store-metatags-3"></div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=神谷バー+浅草" class="map-button" target="_blank">ルート表示</a>
+                </div>
+            </div>
+
+            <div class="spot-card" id="store-4">
+                <img src="https://asset.watch.impress.co.jp/img/trw/docs/1517/214/01_l.jpg" alt="花やしき" class="spot-image" id="store-image-4">
+                <div class="spot-content">
+                    <h3 id="store-name-4">花やしき</h3>
+                    <p id="store-description-4">日本最古の遊園地。レトロな雰囲気と懐かしのアトラクションが魅力。</p>
+                    <div class="spot-info">
+                        <span id="store-crowdedness-4">混雑度: 中</span> |
+                        <span id="store-wait-time-4">待ち時間: 15分</span> |
+                        <span id="store-distance-4">0.9km</span>
+                    </div>
+                    <div id="store-metatags-4"></div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=花やしき+浅草" class="map-button" target="_blank">ルート表示</a>
+                </div>
+            </div>
+
+            <div class="spot-card" id="store-5">
+                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/62/59/95/getlstd-property-photo.jpg?w=1200&h=-1&s=1" alt="浅草きんぎょ" class="spot-image" id="store-image-5">
+                <div class="spot-content">
+                    <h3 id="store-name-5">浅草きんぎょ</h3>
+                    <p id="store-description-5">金魚をモチーフにしたかわいい和菓子が人気の甘味処。</p>
+                    <div class="spot-info">
+                        <span id="store-crowdedness-5">混雑度: 高</span> |
+                        <span id="store-wait-time-5">待ち時間: 20分</span> |
+                        <span id="store-distance-5">0.4km</span>
+                    </div>
+                    <div id="store-metatags-5"></div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=浅草きんぎょ" class="map-button" target="_blank">ルート表示</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="#" class="nav-btn active">
+            <svg viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            ホーム
+        </a>
+        <a href="#" class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            マップ
+        </a>
+        <a href="#" class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+            </svg>
+            予約
+        </a>
+        <a href="#" class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            マイページ
+        </a>
+    </nav>
+    <script>
+    async function loadStoreData() {
+      try {
+        const response = await fetch('http://localhost:3000/api/stores');
+        const stores = await response.json();
+        stores.forEach((store, index) => {
+          const storeId = index + 1;
+          document.getElementById(`store-name-${storeId}`).textContent = store.name;
+          document.getElementById(`store-description-${storeId}`).textContent = store.description;
+          document.getElementById(`store-image-${storeId}`).src = store.imageUrl;
+          document.getElementById(`store-crowdedness-${storeId}`).textContent = `混雑度: ${store.crowdedness}`;
+          document.getElementById(`store-wait-time-${storeId}`).textContent = `待ち時間: ${store.waitTime}分`;
+          document.getElementById(`store-distance-${storeId}`).textContent = `${store.distance}km`;
+          const metatagsElement = document.getElementById(`store-metatags-${storeId}`);
+          metatagsElement.innerHTML = store.metatags.map(tag => `<span class="metatag">${tag}</span>`).join('');
+        });
+      } catch (error) {
+        console.error('Error loading store data:', error);
+      }
+    }
+
+    // ページロード時にデータを取得
+    window.addEventListener('load', loadStoreData);
+    </script>
+</body>
+</html>

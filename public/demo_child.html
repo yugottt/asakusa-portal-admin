@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>米久本店 - PULSE ASAKUSA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF4B2B;
+            --secondary-color: #FF416C;
+            --text-color: #333;
+            --bg-color: #FFFFFF;
+            --card-bg-color: #f9f9f9;
+        }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: var(--primary-color);
+        }
+        .back-button {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .shop-info {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .shop-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .info-row {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .gallery-image {
+            width: calc(50% - 5px);
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .menu-highlights {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .menu-item {
+            margin-bottom: 15px;
+        }
+        .menu-item h4 {
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+        }
+        .reservation-btn {
+            display: block;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .reviews {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .review {
+            margin-bottom: 15px;
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .review-stars {
+            color: #FFD700;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .nav-btn {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .nav-btn.active {
+            color: var(--primary-color);
+        }
+        .nav-btn svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        .nav-btn.active svg {
+            fill: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">←</a>
+        <h1>米久本店</h1>
+
+        <div class="shop-info">
+          <img src="..." class="shop-image" id="store-image">
+          <div class="info-row">
+            <span id="store-crowdedness">混雑度: 中</span> |
+            <span id="store-wait-time">待ち時間: 30分</span> |
+            <span id="store-distance">0.5km</span>
+          </div>
+          <p id="store-description">創業1872年の老舗すき焼き店。伝統的な味わいと雰囲気が人気を集め、浅草を代表する名店として知られています。</p>
+          <div id="store-metatags"></div>
+        </div>
+
+        <h2>写真ギャラリー</h2>
+        <div class="photo-gallery">
+            <img src="https://lh4.googleusercontent.com/proxy/mSZa-QsZ2y-lDq9HpsYsfohI964DIWciRmvXkq_D2iiSkoAZHdIxZT29OjZVLPEXrzL9_uj7BAK_gm-EtU4o5SM9KaDm8G1BVgBZVQ" alt="店内の様子" class="gallery-image">
+            <img src="https://cdn-ak.f.st-hatena.com/images/fotolife/m/magicaline2/20161030/20161030080640.jpg" alt="すき焼き" class="gallery-image">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQtR-84K5ku3UiGMwYp7QOdn7e6XZ_VfOPaA&s" alt="個室" class="gallery-image">
+            <img src="https://i.autoreserve.com/thumb/1200x1200/restaurant_image/image/049/923/694/49923694/ef809380-2f93-4d4c-a94f-fe128eb5a1dd.jpeg" alt="外観" class="gallery-image">
+        </div>
+
+        <h2>メニューのハイライト</h2>
+        <div class="menu-highlights">
+            <div class="menu-item">
+                <h4>特選和牛すき焼きコース</h4>
+                <p>最高級の和牛を使用した贅沢なすき焼きコース</p>
+            </div>
+            <div class="menu-item">
+                <h4>米久特製しゃぶしゃぶ</h4>
+                <p>厳選された肉と特製のだしが絶妙にマッチ</p>
+            </div>
+            <div class="menu-item">
+                <h4>季節の会席料理</h4>
+                <p>旬の食材を使用した華やかな会席料理</p>
+            </div>
+        </div>
+
+        <a href="#" class="reservation-btn">人力車を予約する</a>
+
+        <h2>お客様の声</h2>
+        <div class="reviews">
+            <div class="review">
+                <div class="review-header">
+                    <span>匿名さん</span>
+                    <span class="review-stars">★★★★★</span>
+                </div>
+                <p>とても美味しかったです。接客も素晴らしく、特別な日に利用するのにぴったりです。</p>
+            </div>
+            <div class="review">
+                <div class="review-header">
+                    <span>John D.さん</span>
+                    <span class="review-stars">★★★★☆</span>
+                </div>
+                <p>伝統的な日本料理を楽しむことができました。価格は少し高めですが、その価値はあります。</p>
+            </div>
+        </div>
+    </div>
+
+   <nav class="nav-bar">
+        <a href="#" class="nav-btn active">
+            <svg viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            ホーム
+        </a>
+        <a href="#" class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            マップ
+        </a>
+        <a href="#" class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+            </svg>
+            予約
+        </a>
+        <a href="#" class="nav-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            マイページ
+        </a>
+    </nav>
+    <script>
+    async function loadStoreData() {
+        const storeId = 1; // または適切なstore IDを設定
+        try {
+            const response = await fetch(`http://localhost:3000/api/stores/${storeId}`);
+            const storeData = await response.json();
+            // ここで、取得したデータを使ってページの内容を更新します
+            document.getElementById('store-name').textContent = storeData.name;
+            document.getElementById('store-description').textContent = storeData.description;
+            document.getElementById('store-image').src = storeData.imageUrl;
+            document.getElementById('store-crowdedness').textContent = `混雑度: ${storeData.crowdedness}`;
+            document.getElementById('store-wait-time').textContent = `待ち時間: ${storeData.waitTime}分`;
+            document.getElementById('store-distance').textContent = `距離: ${storeData.distance}km`;
+            // メタタグの更新
+            const metatagsElement = document.getElementById('store-metatags');
+            metatagsElement.innerHTML = storeData.metatags.map(tag => `<span class="metatag">${tag}</span>`).join('');
+        } catch (error) {
+            console.error('Error loading store data:', error);
+        }
+    }
+
+    // ページロード時にデータを取得
+    window.addEventListener('load', loadStoreData);
+    </script>
+</body>
+</html>

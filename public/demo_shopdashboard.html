@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>店舗管理ダッシュボード</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>店舗管理ダッシュボード</h1>
+    <div class="dashboard">
+        <div class="card">
+            <h2>日別・時間帯別来店者数</h2>
+            <canvas id="visitorChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>売上推移</h2>
+            <canvas id="salesChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>人気商品/サービスランキング</h2>
+            <table id="popularItems">
+                <tr>
+                    <th>順位</th>
+                    <th>商品/サービス名</th>
+                    <th>売上</th>
+                </tr>
+                <!-- データはJavaScriptで動的に追加 -->
+            </table>
+        </div>
+        <div class="card">
+            <h2>顧客満足度</h2>
+            <canvas id="satisfactionChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>予約状況</h2>
+            <canvas id="reservationChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>周辺店舗との比較</h2>
+            <canvas id="comparisonChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>SNSでの言及・評価</h2>
+            <canvas id="snsChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>顧客属性分析</h2>
+            <canvas id="customerAttributeChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>在庫状況</h2>
+            <table id="inventoryStatus">
+                <tr>
+                    <th>商品名</th>
+                    <th>在庫数</th>
+                    <th>状態</th>
+                </tr>
+                <!-- データはJavaScriptで動的に追加 -->
+            </table>
+        </div>
+        <div class="card">
+            <h2>スタッフパフォーマンス</h2>
+            <canvas id="staffPerformanceChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // 日別・時間帯別来店者数
+        new Chart(document.getElementById('visitorChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['6時', '9時', '12時', '15時', '18時', '21時'],
+                datasets: [{
+                    label: '来店者数',
+                    data: [10, 30, 50, 40, 60, 40],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            }
+        });
+
+        // 売上推移
+        new Chart(document.getElementById('salesChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['月', '火', '水', '木', '金', '土', '日'],
+                datasets: [{
+                    label: '売上',
+                    data: [150000, 180000, 160000, 190000, 220000, 300000, 280000],
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                }]
+            }
+        });
+
+        // 人気商品/サービスランキング
+        const popularItems = [
+            {rank: 1, name: '特製天丼', sales: 50000},
+            {rank: 2, name: '江戸前寿司セット', sales: 45000},
+            {rank: 3, name: '抹茶パフェ', sales: 40000},
+            {rank: 4, name: '浅草みやげ', sales: 35000},
+            {rank: 5, name: '観光ガイドツアー', sales: 30000}
+        ];
+        const popularItemsTable = document.getElementById('popularItems');
+        popularItems.forEach(item => {
+            const row = popularItemsTable.insertRow();
+            row.insertCell(0).textContent = item.rank;
+            row.insertCell(1).textContent = item.name;
+            row.insertCell(2).textContent = `¥${item.sales.toLocaleString()}`;
+        });
+
+        // 顧客満足度
+        new Chart(document.getElementById('satisfactionChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['とても満足', '満足', '普通', '不満'],
+                datasets: [{
+                    data: [50, 30, 15, 5],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(255, 99, 132, 0.5)'
+                    ]
+                }]
+            }
+        });
+
+        // 予約状況
+        new Chart(document.getElementById('reservationChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['月', '火', '水', '木', '金', '土', '日'],
+                datasets: [{
+                    label: '予約数',
+                    data: [10, 15, 12, 18, 25, 30, 28],
+                    backgroundColor: 'rgba(153, 102, 255, 0.5)'
+                }]
+            }
+        });
+
+        // 周辺店舗との比較
+        new Chart(document.getElementById('comparisonChart').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: ['売上', '来店者数', '顧客満足度', 'SNS言及', 'リピート率'],
+                datasets: [{
+                    label: '自店',
+                    data: [80, 70, 90, 60, 75],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)',
+                }, {
+                    label: '周辺平均',
+                    data: [70, 65, 80, 70, 60],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)',
+                }]
+            }
+        });
+
+        // SNSでの言及・評価
+        new Chart(document.getElementById('snsChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['月', '火', '水', '木', '金', '土', '日'],
+                datasets: [{
+                    label: 'SNS言及数',
+                    data: [20, 25, 22, 30, 35, 50, 45],
+                    borderColor: 'rgb(255, 159, 64)',
+                    tension: 0.1
+                }]
+            }
+        });
+
+        // 顧客属性分析
+        new Chart(document.getElementById('customerAttributeChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['20代以下', '30代', '40代', '50代', '60代以上'],
+                datasets: [{
+                    data: [20, 25, 30, 15, 10],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
+                    ]
+                }]
+            }
+        });
+
+        // 在庫状況
+        const inventoryItems = [
+            {name: '特製天丼の具', stock: 50, status: '適正'},
+            {name: '江戸前寿司ネタ', stock: 30, status: '要補充'},
+            {name: '抹茶パウダー', stock: 100, status: '過剰'},
+            {name: '浅草みやげ', stock: 200, status: '適正'},
+            {name: 'ガイドブック', stock: 10, status: '緊急補充'}
+        ];
+        const inventoryTable = document.getElementById('inventoryStatus');
+        inventoryItems.forEach(item => {
+            const row = inventoryTable.insertRow();
+            row.insertCell(0).textContent = item.name;
+            row.insertCell(1).textContent = item.stock;
+            row.insertCell(2).textContent = item.status;
+        });
+
+        // スタッフパフォーマンス
+        new Chart(document.getElementById('staffPerformanceChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['佐藤', '鈴木', '田中', '高橋', '渡辺'],
+                datasets: [{
+                    label: '売上貢献度',
+                    data: [90, 85, 95, 80, 88],
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                }, {
+                    label: '顧客満足度',
+                    data: [95, 90, 88, 92, 85],
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
