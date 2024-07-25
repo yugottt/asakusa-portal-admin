@@ -1,0 +1,4 @@
+.DS_Store
+eval "SSH_AUTH_SOCK=/var/folders/2n/4bx165155fqgc3sb7k7l1_wh0000gn/T//ssh-pMLmT61kxVB7/agent.44979; export SSH_AUTH_SOCK;
+SSH_AGENT_PID=44980; export SSH_AGENT_PID;
+echo Agent pid 44980;"*
