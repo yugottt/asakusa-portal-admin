@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浅草ポータル管理ページ</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>浅草ポータル管理ページ</h1>
+    </header>
+    <main>
+        <section id="shop-list">
+            <!-- 店舗リストがここに表示されます -->
+        </section>
+        <section id="shop-editor">
+            <h2>店舗情報編集</h2>
+            <form id="shop-form">
+                <label for="shop-name">店舗名:</label>
+                <input type="text" id="shop-name" required>
+                
+                <label for="shop-description">説明:</label>
+                <textarea id="shop-description" required></textarea>
+                
+                <label for="shop-image">画像URL:</label>
+                <input type="url" id="shop-image">
+                
+                <label for="shop-crowdedness">混雑度:</label>
+                <select id="shop-crowdedness">
+                    <option value="低">低</option>
+                    <option value="中">中</option>
+                    <option value="高">高</option>
+                </select>
+                
+                <label for="shop-wait-time">待ち時間:</label>
+                <input type="number" id="shop-wait-time" min="0"> 分
+                
+                <label for="shop-distance">距離:</label>
+                <input type="number" id="shop-distance" step="0.1"> km
+                
+                <button type="submit">保存</button>
+            </form>
+        </section>
+    </main>
+    <script src="js/script.js"></script>
+</body>
+</html>
