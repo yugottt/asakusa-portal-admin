@@ -1,62 +1,105 @@
-let stores = [
-    { id: 1, name: "米久本店", description: "創業1872年の老舗すき焼き店。", imageUrl: "https://example.com/yonekyuhonten.jpg", crowdedness: "中", waitTime: 30, distance: 0.5 },
-    { id: 2, name: "浅草今半 国際通り本店", description: "明治28年創業の老舗すき焼き店。", imageUrl: "https://example.com/asakusaimahan.jpg", crowdedness: "高", waitTime: 45, distance: 0.7 }
-];
+let currentUser = null;
+const API_BASE_URL = 'http://localhost:3000/api'; // バックエンドAPIのURL
 
-function renderStores() {
-    const storeList = document.getElementById('store-list');
-    storeList.innerHTML = '';
-    stores.forEach(store => {
-        const storeCard = document.createElement('div');
-        storeCard.className = 'store-card';
-        storeCard.innerHTML = `
-            <h2>${store.name}</h2>
-            <p>${store.description}</p>
-            <p>混雑度: ${store.crowdedness}</p>
-            <p>待ち時間: ${store.waitTime}分</p>
-            <p>距離: ${store.distance}km</p>
-            <button onclick="editStore(${store.id})">編集</button>
-        `;
-        storeList.appendChild(storeCard);
-    });
-}
+// ログインフォームのイベントリスナー
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    try {
+        const response = await fetch(`${API_BASE_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+            currentUser = data.user;
+            document.getElementById('logged-in-user').textContent = `ログイン中: ${currentUser.username}`;
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('store-management').style.display = 'block';
+            loadStoreData();
+            loadMetatags();
+        } else {
+            alert('ログインに失敗しました。');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('ログイン中にエラーが発生しました。');
+    }
+});
 
-function editStore(id) {
-    const store = stores.find(s => s.id === id);
-    if (store) {
-        document.getElementById('store-name').value = store.name;
-        document.getElementById('store-description').value = store.description;
-        document.getElementById('store-image').value = store.imageUrl;
-        document.getElementById('store-crowdedness').value = store.crowdedness;
-        document.getElementById('store-wait-time').value = store.waitTime;
-        document.getElementById('store-distance').value = store.distance;
-        document.getElementById('modal').style.display = 'block';
+// ログアウトボタンのイベントリスナー
+document.getElementById('logout-btn').addEventListener('click', () => {
+    currentUser = null;
+    document.getElementById('logged-in-user').textContent = '';
+    document.getElementById('login-section').style.display = 'block';
+    document.getElementById('store-management').style.display = 'none';
+    document.getElementById('login-form').reset();
+});
+
+// 店舗情報のロード
+async function loadStoreData() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/stores/${currentUser.storeId}`);
+        const storeData = await response.json();
+        document.getElementById('store-name').value = storeData.name;
+        document.getElementById('store-description').value = storeData.description;
+        document.getElementById('store-image').value = storeData.imageUrl;
+        document.getElementById('store-crowdedness').value = storeData.crowdedness;
+        document.getElementById('store-wait-time').value = storeData.waitTime;
+        document.getElementById('store-distance').value = storeData.distance;
+        // メタタグのチェックボックスを更新
+        storeData.metatags.forEach(tag => {
+            const checkbox = document.getElementById(`metatag-${tag}`);
+            if (checkbox) checkbox.checked = true;
+        });
+    } catch (error) {
+        console.error('Error loading store data:', error);
+        alert('店舗情報の読み込み中にエラーが発生しました。');
     }
 }
 
-document.getElementById('add-store').addEventListener('click', () => {
-    document.getElementById('store-form').reset();
-    document.getElementById('modal').style.display = 'block';
-});
+// メタタグの読み込みと表示
+async function loadMetatags() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/metatags`);
+        const metatags = await response.json();
+        const container = document.getElementById('metatags-container');
+        metatags.forEach(tag => {
+            const div = document.createElement('div');
+            div.className = 'metatag-checkbox';
+            div.innerHTML = `
+                <input type="checkbox" id="metatag-${tag}" name="metatags" value="${tag}">
+                <label for="metatag-${tag}">${tag}</label>
+            `;
+            container.appendChild(div);
+        });
+    } catch (error) {
+        console.error('Error loading metatags:', error);
+        alert('メタタグの読み込み中にエラーが発生しました。');
+    }
+}
 
-document.getElementById('close-modal').addEventListener('click', () => {
-    document.getElementById('modal').style.display = 'none';
-});
-
-document.getElementById('store-form').addEventListener('submit', (e) => {
+// 店舗情報フォームの送信
+document.getElementById('store-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const newStore = {
-        id: stores.length + 1,
-        name: document.getElementById('store-name').value,
-        description: document.getElementById('store-description').value,
-        imageUrl: document.getElementById('store-image').value,
-        crowdedness: document.getElementById('store-crowdedness').value,
-        waitTime: parseInt(document.getElementById('store-wait-time').value),
-        distance: parseFloat(document.getElementById('store-distance').value)
-    };
-    stores.push(newStore);
-    renderStores();
-    document.getElementById('modal').style.display = 'none';
+    const formData = new FormData(e.target);
+    const storeData = Object.fromEntries(formData.entries());
+    storeData.metatags = Array.from(formData.getAll('metatags'));
+    try {
+        const response = await fetch(`${API_BASE_URL}/stores/${currentUser.storeId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(storeData)
+        });
+        if (response.ok) {
+            alert('店舗情報が更新されました。');
+        } else {
+            alert('店舗情報の更新に失敗しました。');
+        }
+    } catch (error) {
+        console.error('Error updating store data:', error);
+        alert('店舗情報の更新中にエラーが発生しました。');
+    }
 });
-
-renderStores();

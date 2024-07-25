@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>浅草ポータル管理</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>浅草ポータル店舗管理</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <header>
-        <h1>浅草ポータル管理</h1>
+        <h1>浅草ポータル店舗管理</h1>
+        <p id="logged-in-user"></p>
+        <button id="logout-btn">ログアウト</button>
     </header>
     <main>
-        <div id="store-list"></div>
-    </main>
-    <button id="add-store" class="fab"><i class="material-icons">add</i></button>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <h2>店舗情報編集</h2>
+        <section id="login-section">
+            <h2>ログイン</h2>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="ユーザー名" required>
+                <input type="password" id="password" placeholder="パスワード" required>
+                <button type="submit">ログイン</button>
+            </form>
+        </section>
+        <section id="store-management" style="display: none;">
+            <h2>店舗情報管理</h2>
             <form id="store-form">
                 <input type="text" id="store-name" placeholder="店舗名" required>
                 <textarea id="store-description" placeholder="説明" required></textarea>
@@ -29,11 +34,14 @@
                 </select>
                 <input type="number" id="store-wait-time" placeholder="待ち時間（分）" required>
                 <input type="number" id="store-distance" placeholder="距離（km）" step="0.1" required>
+                <div id="metatags-container">
+                    <h3>メタタグ</h3>
+                    <!-- メタタグのチェックボックスがここに動的に追加されます -->
+                </div>
                 <button type="submit">保存</button>
-                <button type="button" id="close-modal">キャンセル</button>
             </form>
-        </div>
-    </div>
+        </section>
+    </main>
     <script src="js/script.js"></script>
 </body>
 </html>
