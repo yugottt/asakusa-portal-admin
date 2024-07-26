@@ -1,10 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
+
+// ミドルウェアの設定
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '../public')));
+
+// EJSをビューエンジンとして設定
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
 
 // ダミーデータ（実際にはデータベースを使用します）
 const users = [
@@ -18,6 +26,20 @@ const stores = [
 ];
 
 const metatags = ['すき焼き', '老舗', '和食', '観光スポット', '家族向け'];
+
+// ルート設定
+app.get('/', (req, res) => {
+  res.render('home', { stores: stores });
+});
+
+app.get('/store/:id', (req, res) => {
+  const store = stores.find(s => s.id === parseInt(req.params.id));
+  if (store) {
+    res.render('store', { store: store });
+  } else {
+    res.status(404).send('Store not found');
+  }
+});
 
 // ログインAPI
 app.post('/api/login', (req, res) => {
@@ -56,5 +78,6 @@ app.get('/api/metatags', (req, res) => {
     res.json(metatags);
 });
 
+// サーバー起動
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

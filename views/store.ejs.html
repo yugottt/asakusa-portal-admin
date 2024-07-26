@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= store.name %> - 浅草ポータル</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="back-button">←</a>
+        <h1><%= store.name %></h1>
+    </header>
+
+    <main>
+        <div class="shop-info">
+            <img src="<%= store.imageUrl %>" alt="<%= store.name %>" class="shop-image">
+            <div class="info-row">
+                混雑度: <%= store.crowdedness %> | 
+                待ち時間: <%= store.waitTime %>分 | 
+                <%= store.distance %>km
+            </div>
+            <p><%= store.description %></p>
+        </div>
+
+        <h2>メニューのハイライト</h2>
+        <div class="menu-highlights">
+            <!-- メニュー項目をループで表示（データがある場合） -->
+        </div>
+
+        <button class="reservation-btn">予約する</button>
+
+        <h2>お客様の声</h2>
+        <div class="reviews">
+            <!-- レビューをループで表示（データがある場合） -->
+        </div>
+    </main>
+
+    <footer>
+        <nav>
+            <a href="/" class="nav-btn">ホーム</a>
+            <a href="#" class="nav-btn">マップ</a>
+            <a href="#" class="nav-btn">予約</a>
+            <a href="#" class="nav-btn">マイページ</a>
+        </nav>
+    </footer>
+</body>
+</html>

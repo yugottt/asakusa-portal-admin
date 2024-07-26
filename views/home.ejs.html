@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浅草ポータル</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>浅草ポータル</h1>
+        <div class="search-container">
+            <input type="text" placeholder="検索...">
+        </div>
+        <div class="language-selector">
+            <select>
+                <option>日本語</option>
+                <option>English</option>
+                <option>中文</option>
+                <option>한국어</option>
+                <option>ไทย</option>
+            </select>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#food">食事</a></li>
+            <li><a href="#shopping">買い物</a></li>
+            <li><a href="#experience">体験</a></li>
+            <li><a href="#accommodation">宿泊</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>おすすめスポット</h2>
+        <div class="spot-list">
+            <% stores.forEach(function(store) { %>
+                <div class="spot-card">
+                    <img src="<%= store.imageUrl %>" alt="<%= store.name %>" class="spot-image">
+                    <div class="spot-content">
+                        <h3><%= store.name %></h3>
+                        <p><%= store.description %></p>
+                        <div class="spot-info">
+                            混雑度: <%= store.crowdedness %> | 
+                            待ち時間: <%= store.waitTime %>分 | 
+                            <%= store.distance %>km
+                        </div>
+                        <a href="/store/<%= store.id %>" class="map-button">詳細を見る</a>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </main>
+
+    <footer>
+        <nav>
+            <a href="#" class="nav-btn active">ホーム</a>
+            <a href="#" class="nav-btn">マップ</a>
+            <a href="#" class="nav-btn">予約</a>
+            <a href="#" class="nav-btn">マイページ</a>
+        </nav>
+    </footer>
+</body>
+</html>
